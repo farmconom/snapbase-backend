@@ -12,14 +12,34 @@ export class FirebaseController {
   @Get('verification-link/:email')
   async generateEmailVerificationLink(
     @Param('email') email: string,
-  ): Promise<string> {
-    return this.firebaseService.generateEmailVerificationLink(email);
+  ): Promise<{ status: number; message: string; data: string }> {
+    try {
+      const verificationLink =
+        await this.firebaseService.generateEmailVerificationLink(email);
+      return {
+        status: 200,
+        message: 'Email verification link generated successfully',
+        data: verificationLink,
+      };
+    } catch (error) {
+      return { status: 500, message: 'Internal server error', data: null };
+    }
   }
 
   @Get('password-reset-link/:email')
   async generatePasswordResetLink(
     @Param('email') email: string,
-  ): Promise<string> {
-    return this.firebaseService.generatePasswordResetLink(email);
+  ): Promise<{ status: number; message: string; data: string }> {
+    try {
+      const verificationLink =
+        await this.firebaseService.generatePasswordResetLink(email);
+      return {
+        status: 200,
+        message: 'Reset password link generated successfully',
+        data: verificationLink,
+      };
+    } catch (error) {
+      return { status: 500, message: 'Internal server error', data: null };
+    }
   }
 }
