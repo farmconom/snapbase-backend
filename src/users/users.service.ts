@@ -1,26 +1,31 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { FirestoreService } from '../firebase/firebase.service';
 
 @Injectable()
 export class UsersService {
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  constructor(private readonly firestoreService: FirestoreService) {}
+
+  async create(createUserDto: CreateUserDto) {
+    return await this.firestoreService.addUser(createUserDto);
   }
 
-  findAll() {
-    return `This action returns all users`;
+  async findAll() {
+    return await this.firestoreService.getUsers();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: string) {
+    return await this.firestoreService.getUserById(id);
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    // Since Firestore does not have native update functionality like SQL databases, we'll perform a delete and create
+    await this.firestoreService.deleteUser(id);
+    return await this.firestoreService.addUser(updateUserDto);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: string) {
+    return await this.firestoreService.deleteUser(id);
   }
 }
