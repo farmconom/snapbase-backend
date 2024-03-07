@@ -66,7 +66,8 @@ export class FirestoreService {
   async addUser(userData: CreateUserDto, id: string): Promise<any | null> {
     try {
       const createdAt = admin.firestore.FieldValue.serverTimestamp();
-      const userWithId = { ...userData, id, createdAt };
+      const updatedAt = admin.firestore.FieldValue.serverTimestamp();
+      const userWithId = { ...userData, id, createdAt, updatedAt };
 
       await this.db.collection('users').doc(id).set(userWithId);
       return createResponse(200, 'User created successfully', userWithId);
@@ -81,7 +82,9 @@ export class FirestoreService {
 
   async updateUser(userData: UpdateUserDto, uid: string): Promise<any | null> {
     try {
-      const updatedUserData = addPrefixToKeys(userData);
+      const newUpdatedAt = new Date(); // Use new Date() to get the current timestamp
+      const newUserData = { ...userData, updatedAt: newUpdatedAt };
+      const updatedUserData = addPrefixToKeys(newUserData);
       const userQuerySnapshot = await this.db
         .collection('users')
         .where('uid', '==', uid)
