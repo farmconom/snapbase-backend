@@ -7,6 +7,6 @@ import { FirebaseService, FirestoreService } from './firebase.service';
   imports: [ConfigModule],
   controllers: [FirebaseController],
   providers: [FirebaseService, FirestoreService],
-  exports: [FirestoreService],
+  exports: [FirestoreService, FirestoreService],
 })
 export class FirebaseModule {}

@@ -1,8 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { FirestoreService } from '../firebase/firebase.service';
 import { v4 as uuidv4 } from 'uuid';
+import { ApiResponse } from 'src/helpers/response.helper';
+import { User } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
@@ -13,12 +15,12 @@ export class UsersService {
     return await this.firestoreService.addUser(createUserDto, id);
   }
 
-  async findAll() {
-    return await this.firestoreService.getUsers();
-  }
-
-  async findOne(uid: string) {
-    return await this.firestoreService.getUserById(uid);
+  async getUserByUid(uid: string): Promise<ApiResponse<User>> {
+    const user = await this.firestoreService.getUserById(uid);
+    if (!user.data) {
+      throw new HttpException('User not found', HttpStatus.BAD_REQUEST);
+    }
+    return user;
   }
 
   async update(uid: string, updateUserDto: UpdateUserDto) {

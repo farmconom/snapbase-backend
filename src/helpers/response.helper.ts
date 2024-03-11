@@ -1,3 +1,9 @@
+export type ApiResponse<T> = {
+  status: number;
+  message: string;
+  data: T;
+};
+
 export function createResponse(
   status: number,
   message: string,

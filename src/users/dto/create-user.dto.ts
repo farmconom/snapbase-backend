@@ -15,21 +15,35 @@ export const exampleCreateUserDto: CreateUserDto = {
 };
 
 export class CreateUserDto {
-  @ApiProperty({ example: exampleCreateUserDto.email })
+  @ApiProperty({
+    description: 'email',
+    required: true,
+    example: exampleCreateUserDto.email,
+  })
+  @IsNotEmpty()
   @IsEmail()
   email: string;
 
-  @ApiProperty({ example: exampleCreateUserDto.phoneNumber })
+  @ApiProperty({
+    example: exampleCreateUserDto.phoneNumber,
+    description: 'phoneNumber',
+  })
   @IsString()
   @IsOptional()
   phoneNumber?: string;
 
-  @ApiProperty({ example: exampleCreateUserDto.displayName })
+  @ApiProperty({
+    example: exampleCreateUserDto.displayName,
+    description: 'displayName',
+  })
   @IsString()
   @IsOptional()
   displayName?: string;
 
-  @ApiProperty({ example: exampleCreateUserDto.photoURL })
+  @ApiProperty({
+    example: exampleCreateUserDto.photoURL,
+    description: 'photoURL',
+  })
   @IsString()
   @IsOptional()
   photoURL?: string;
@@ -38,15 +52,28 @@ export class CreateUserDto {
   // @IsString()
   // providerId: string;
 
-  @ApiProperty({ example: exampleCreateUserDto.uid })
+  @ApiProperty({
+    example: exampleCreateUserDto.uid,
+    description: 'uid',
+    required: true,
+  })
+  @IsNotEmpty()
   @IsString()
   uid: string;
 
-  @ApiProperty({ example: exampleCreateUserDto.emailVerified })
+  @ApiProperty({
+    example: exampleCreateUserDto.emailVerified,
+    description: 'emailVerified',
+    required: true,
+  })
   @IsNotEmpty()
   emailVerified: boolean;
 
-  @ApiProperty({ example: exampleCreateUserDto.isAnonymous })
+  @ApiProperty({
+    example: exampleCreateUserDto.isAnonymous,
+    description: 'isAnonymous',
+    required: true,
+  })
   @IsNotEmpty()
   isAnonymous: boolean;
 

@@ -1,3 +1,8 @@
+type Tokens = {
+  accessToken: string;
+  refreshToken: string;
+};
+
 export class User {
   id: string;
   createdAt: Date;
@@ -12,6 +17,7 @@ export class User {
   isAnonymous: boolean;
   // tenantId: string | null;
   // refreshToken: string;
+  tokens?: Tokens;
 
   constructor(
     id: string,
@@ -27,6 +33,7 @@ export class User {
     isAnonymous: boolean,
     // tenantId: string | null,
     // refreshToken: string,
+    tokens?: Tokens,
   ) {
     this.id = id;
     this.createdAt = createdAt;
@@ -41,5 +48,6 @@ export class User {
     this.isAnonymous = isAnonymous;
     // this.tenantId = tenantId;
     // this.refreshToken = refreshToken;
+    this.tokens = tokens || undefined;
   }
 }
