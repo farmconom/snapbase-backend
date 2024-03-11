@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UsersModule } from './users/users.module';
+import { UsersModule } from './users/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { FirebaseModule } from './firebase/firebase.module';
 import config from './common/configs/config';
@@ -14,7 +14,7 @@ import { AuthModule } from './auth/auth.module';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { FirestoreService } from './firebase/firebase.service';
 import { AuthService } from './auth/auth.service';
-import { UsersService } from './users/users.service';
+import { UsersService } from './users/user.service';
 import { AuthMiddleware } from './middleware/auth-middleware';
 
 @Module({

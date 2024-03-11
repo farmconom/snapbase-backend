@@ -9,15 +9,15 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { UsersService } from './users.service';
+import { UsersService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { Auth } from '../auth/decorator/auth.decorator';
 import { CustomAuthGuard } from 'src/auth/guard/custom.guard';
 
-@Controller('users')
-@ApiTags('Users')
+@Controller('user')
+@ApiTags('User')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
@@ -30,7 +30,6 @@ export class UsersController {
   @Get()
   async me(@Req() req: any) {
     const userId = req.user.uid;
-    console.log(14124124, userId);
     const userDetail = await this.usersService.getUserByUid(userId);
     return userDetail;
   }

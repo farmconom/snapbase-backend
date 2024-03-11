@@ -5,10 +5,10 @@ import { ConfigService } from '@nestjs/config';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './jwt.strategy';
 import { SecurityConfig } from 'src/common/configs/config.interface';
-import { UsersService } from 'src/users/users.service';
+import { UsersService } from 'src/users/user.service';
 import { FirebaseService } from 'src/firebase/firebase.service';
 import { FirebaseModule } from 'src/firebase/firebase.module';
-import { UsersModule } from 'src/users/users.module';
+import { UsersModule } from 'src/users/user.module';
 import { AuthController } from './auth.controller';
 import { AuthMiddleware } from 'src/middleware/auth-middleware';
 

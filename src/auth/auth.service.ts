@@ -9,7 +9,7 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { SecurityConfig } from 'src/common/configs/config.interface';
 import { User } from 'src/users/entities/user.entity';
-import { UsersService } from 'src/users/users.service';
+import { UsersService } from 'src/users/user.service';
 import { SignUpWithEmailInput } from './dto/sing.input';
 import { ApiResponse, createResponse } from 'src/helpers/response.helper';
 
