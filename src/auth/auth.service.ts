@@ -8,8 +8,8 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { SecurityConfig } from 'src/common/configs/config.interface';
-import { User } from 'src/users/entities/user.entity';
-import { UsersService } from 'src/users/user.service';
+import { User } from 'src/user/entities/user.entity';
+import { UserService } from 'src/user/user.service';
 import { SignUpWithEmailInput } from './dto/sing.input';
 import { ApiResponse, createResponse } from 'src/helpers/response.helper';
 
@@ -18,11 +18,11 @@ export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
-    private readonly usersService: UsersService,
+    private readonly userService: UserService,
   ) {}
 
   async validateUser(uid: string): Promise<ApiResponse<User>> {
-    const user = await this.usersService.getUserByUid(uid);
+    const user = await this.userService.getUserByUid(uid);
     return user;
   }
 

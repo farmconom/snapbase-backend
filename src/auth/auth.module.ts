@@ -5,17 +5,17 @@ import { ConfigService } from '@nestjs/config';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './jwt.strategy';
 import { SecurityConfig } from 'src/common/configs/config.interface';
-import { UsersService } from 'src/users/user.service';
+import { UserService } from 'src/user/user.service';
 import { FirebaseService } from 'src/firebase/firebase.service';
 import { FirebaseModule } from 'src/firebase/firebase.module';
-import { UsersModule } from 'src/users/user.module';
+import { UserModule } from 'src/user/user.module';
 import { AuthController } from './auth.controller';
 import { AuthMiddleware } from 'src/middleware/auth-middleware';
 
 @Module({
   imports: [
     FirebaseModule,
-    forwardRef(() => UsersModule),
+    forwardRef(() => UserModule),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
       useFactory: async (configService: ConfigService) => {
@@ -34,7 +34,7 @@ import { AuthMiddleware } from 'src/middleware/auth-middleware';
   providers: [
     AuthService,
     JwtStrategy,
-    UsersService,
+    UserService,
     FirebaseService,
     AuthMiddleware,
     ConfigService,

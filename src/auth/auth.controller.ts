@@ -23,7 +23,7 @@ export class AuthController {
     const tokens = this.authService.generateTokens({
       userId: user.data.uid,
     });
-    const data = { ...user, data: { ...user.data, tokens } };
+    const data = { ...user, data: { ...user.data, tokens: tokens } };
     return data;
   }
 
@@ -31,11 +31,8 @@ export class AuthController {
   @Post('email/sign-up')
   async signUpWithEmail(@Body() body: SignUpWithEmailInput) {
     const user = await this.firebaseService.signUpWithEmailAndPassword(body);
-    const tokens = this.authService.generateTokens({
-      userId: user.data.uid,
-    });
-    const data = { ...user, data: { ...user.data, tokens } };
-    return data;
+
+    return user;
   }
 
   @Post('email/sign-in')
@@ -44,7 +41,7 @@ export class AuthController {
     const tokens = this.authService.generateTokens({
       userId: user.data.uid,
     });
-    const data = { ...user, data: { ...user.data, tokens } };
+    const data = { ...user, data: { ...user.data, tokens: tokens } };
     return data;
   }
 
@@ -55,7 +52,7 @@ export class AuthController {
     const tokens = this.authService.generateTokens({
       userId: user.data.uid,
     });
-    const data = { ...user, data: { ...user.data, tokens } };
+    const data = { ...user, data: { ...user.data, tokens: tokens } };
     return data;
   }
 }

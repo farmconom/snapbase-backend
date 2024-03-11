@@ -1,16 +1,16 @@
-import { UsersService } from 'src/users/user.service';
+import { UserService } from 'src/user/user.service';
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt/dist/jwt.service';
 import { ConfigService } from '@nestjs/config';
 import { ApiResponse } from 'src/helpers/response.helper';
-import { User } from 'src/users/entities/user.entity';
+import { User } from 'src/user/entities/user.entity';
 
 @Injectable()
 export class CustomAuthGuard implements CanActivate {
   constructor(
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
-    private userService: UsersService,
+    private userService: UserService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {

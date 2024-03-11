@@ -7,7 +7,7 @@ import { ApiResponse } from 'src/helpers/response.helper';
 import { User } from './entities/user.entity';
 
 @Injectable()
-export class UsersService {
+export class UserService {
   constructor(private readonly firestoreService: FirestoreService) {}
 
   async create(createUserDto: CreateUserDto) {

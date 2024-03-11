@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { UsersService } from './user.service';
-import { UsersController } from './user.controller';
+import { UserService } from './user.service';
+import { UserController } from './user.controller';
 import { FirebaseModule } from '../firebase/firebase.module';
 import { CustomAuthGuard } from 'src/auth/guard/custom.guard';
 import { FirestoreService } from 'src/firebase/firebase.service';
@@ -11,15 +11,16 @@ import { AuthService } from 'src/auth/auth.service';
 import { JwtService } from '@nestjs/jwt';
 
 @Module({
-  imports: [FirebaseModule, FirebaseModule, AuthModule, JwtModule],
-  controllers: [UsersController],
+  imports: [FirebaseModule, AuthModule, JwtModule],
+  controllers: [UserController],
   providers: [
-    UsersService,
+    UserService,
     CustomAuthGuard,
     FirestoreService,
     JwtStrategy,
     JwtService,
     AuthService,
   ],
+  exports: [UserService],
 })
-export class UsersModule {}
+export class UserModule {}

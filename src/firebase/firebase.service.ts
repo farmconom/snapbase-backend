@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import * as admin from 'firebase-admin';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
-import { CreateUserDto } from '../users/dto/create-user.dto';
-import { UpdateUserDto } from '../users/dto/update-user.dto';
+import { CreateUserDto } from '../user/dto/create-user.dto';
+import { UpdateUserDto } from '../user/dto/update-user.dto';
 import {
   ApiResponse,
   addPrefixToKeys,
@@ -13,8 +13,9 @@ import {
   SignInWithEmailInput,
   SignUpWithEmailInput,
 } from 'src/auth/dto/sing.input';
-import { User } from 'src/users/entities/user.entity';
+import { User } from 'src/user/entities/user.entity';
 import { convertUserFirebase } from 'src/helpers/convert-user-firebase.helper';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class FirestoreService {
@@ -64,14 +65,26 @@ export class FirestoreService {
 
   async addUser(
     userData: CreateUserDto,
-    id: string,
+    newId: string,
   ): Promise<ApiResponse<User | null>> {
     try {
-      const createdAt = admin.firestore.FieldValue.serverTimestamp();
-      const updatedAt = admin.firestore.FieldValue.serverTimestamp();
-      const userWithId = { ...userData, id, createdAt, updatedAt };
+      const createdAt = admin.firestore.Timestamp.now().toDate();
+      const updatedAt = admin.firestore.Timestamp.now().toDate();
+      const userWithId: User = {
+        id: newId,
+        createdAt: createdAt,
+        updatedAt: updatedAt,
+        email: userData.email,
+        phoneNumber: userData.phoneNumber,
+        displayName: userData.displayName,
+        photoURL: userData.photoURL,
+        uid: userData.uid,
+        emailVerified: userData.emailVerified,
+        isAnonymous: userData.isAnonymous,
+        tokens: null,
+      };
 
-      await this.db.collection('users').doc(id).set(userWithId);
+      await this.db.collection('users').doc(newId).set(userWithId);
       return createResponse(200, 'User created successfully', userWithId);
     } catch (error) {
       return createResponse(
@@ -180,10 +193,14 @@ export class FirebaseService {
         displayName: payload.userName,
       });
 
-      await this.firestoreService.addUser(mappingUser, mappingUser.uid);
+      const newId = uuidv4();
+      const userResp = await this.firestoreService.addUser(mappingUser, newId);
 
-      const userResp = convertUserFirebase(userCredential.user);
-      return createResponse(200, 'Sign up with email successfully', userResp);
+      return createResponse(
+        200,
+        'Sign up with email successfully',
+        userResp.data || convertUserFirebase(userCredential.user),
+      );
     } catch (error) {
       return createResponse(
         500,
@@ -200,8 +217,14 @@ export class FirebaseService {
       const userCredential = await firebase
         .auth()
         .signInWithEmailAndPassword(payload.email, payload.password);
-      const user = convertUserFirebase(userCredential.user);
-      return createResponse(200, 'Sign in with email successfully', user);
+      const userResp = await this.firestoreService.getUserById(
+        userCredential.user.uid,
+      );
+      return createResponse(
+        200,
+        'Sign in with email successfully',
+        userResp.data || convertUserFirebase(userCredential.user),
+      );
     } catch (error) {
       return createResponse(
         500,
@@ -217,9 +240,16 @@ export class FirebaseService {
 
       // Sign in with Google using a popup window
       const userCredential = await firebase.auth().signInWithPopup(provider);
-      const user = convertUserFirebase(userCredential.user);
 
-      return createResponse(200, 'Sign in with google successfully', user);
+      const userResp = await this.firestoreService.getUserById(
+        userCredential.user.uid,
+      );
+
+      return createResponse(
+        200,
+        'Sign in with google successfully',
+        userResp.data || convertUserFirebase(userCredential.user),
+      );
     } catch (error) {
       return createResponse(
         500,
